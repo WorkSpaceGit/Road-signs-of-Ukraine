@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Дорожні знаки України</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: Arial, sans-serif;
+  background: #1e1e1e;
+  color: #f0f0f0;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Знак по центру */
+#signWrapper {
+  width: 80%;
+  max-width: 600px;
+  max-height: 60vh;
+  margin-bottom: 10px; /* завжди 10px до нижнього контенту */
+}
+
+#signImage {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Нижній контент */
+#bottomContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Таймер */
+#timerContainer {
+  display: grid;
+  grid-template-columns: repeat(14, 20px);
+  gap: 2px;
+  margin-bottom: 10px;
+  height: 30px;
+}
+.timerBlock {
+  height: 30px;
+  transition: background 0.5s, opacity 0.5s;
+}
+
+/* Інформація про знак */
+#signInfo {
+  display: none;
+  margin-bottom: 10px;
+  max-width: 800px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  background: #333;
+  color: #f0f0f0;
+  border: none;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* Адаптивність */
+@media (max-height: 700px) {
+  #timerContainer {
+    grid-template-columns: repeat(14, 15px);
+    height: 25px;
+  }
+  button {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="signWrapper">
+  <img id="signImage" src="" alt="UA road sign">
+</div>
+
+<div id="bottomContent">
+  <div id="timerContainer"></div>
+
+  <div id="signInfo">
+    <h2 id="signNumber"></h2>
+    <h3 id="signName"></h3>
+    <p id="signDescription"></p>
+  </div>
+
+  <div class="controls">
+    <button id="showInfoButton">Показати інформацію</button>
+    <button id="pauseButton">Пауза</button>
+    <button id="nextButton" style="display:none;">Наступний</button>
+  </div>
+</div>
+
+<script>
+const SignQuiz = {
+  signs: [
+    {
+      number: "1.1",
+      name: "Небезпечний поворот праворуч",
+      description: "Знаки 1.1 і 1.2 попереджають про заокруглення дороги радіусом менше 500 м поза населеними пунктами і менше 150 м — у населених пунктах або про заокруглення з обмеженою оглядовістю.",
+      image: "https://upload.wikimedia.org/wikipedia/commons/f/f5/UA_road_sign_1.1.svg",
+      link: "https://commons.wikimedia.org/wiki/File:UA_road_sign_1.1.svg"
+    },
+    {
+      number: "1.2",
+      name: "Небезпечний поворот ліворуч",
+      description: "Знак попереджає про небезпечний поворот ліворуч.",
+      image: "https://upload.wikimedia.org/wikipedia/commons/6/6a/UA_road_sign_1.2.svg",
+      link: "https://commons.wikimedia.org/wiki/File:UA_road_sign_1.2.svg"
+    }
+  ],
+  currentIndex: 0,
+  totalBlocks: 14,
+  removePerSecond: 2,
+  currentBlocks: 14,
+  paused: false,
+  interval: null,
+
+  init() {
+    this.signImage = document.getElementById("signImage");
+    this.timerContainer = document.getElementById("timerContainer");
+    this.blocks = [];
+    this.signInfo = document.getElementById("signInfo");
+    this.signNumber = document.getElementById("signNumber");
+    this.signName = document.getElementById("signName");
+    this.signDescription = document.getElementById("signDescription");
+    this.showInfoButton = document.getElementById("showInfoButton");
+    this.pauseButton = document.getElementById("pauseButton");
+    this.nextButton = document.getElementById("nextButton");
+
+    this.showInfoButton.onclick = () => this.showInfo();
+    this.pauseButton.onclick = () => this.togglePause();
+    this.nextButton.onclick = () => this.nextSign();
+
+    this.loadSign();
+  },
+
+  loadSign() {
+    const sign = this.signs[this.currentIndex];
+    this.signImage.src = sign.image;
+    this.signImage.onclick = () => window.open(sign.link, "_blank");
+    this.signNumber.textContent = sign.number;
+    this.signName.textContent = sign.name;
+    this.signDescription.textContent = sign.description;
+
+    this.timerContainer.style.display = "grid";
+    this.signInfo.style.display = "none";
+    this.showInfoButton.style.display = "inline-block";
+    this.pauseButton.style.display = "inline-block";
+    this.nextButton.style.display = "none";
+
+    this.timerContainer.innerHTML = "";
+    this.blocks = [];
+    this.currentBlocks = this.totalBlocks;
+    for(let i=0;i<this.totalBlocks;i++){
+      let b = document.createElement('div');
+      b.className = 'timerBlock';
+      this.timerContainer.appendChild(b);
+      this.blocks.push(b);
+    }
+
+    this.updateBlocks();
+    this.startTimer();
+  },
+
+  updateBlocks() {
+    for(let i=0;i<this.totalBlocks;i++){
+      if(i<this.currentBlocks){
+        let ratio = i/(this.totalBlocks-1);
+        this.blocks[i].style.background = `rgb(${Math.round(255*ratio)},${Math.round(255*(1-ratio))},0)`;
+        this.blocks[i].style.opacity = 1;
+      } else {
+        this.blocks[i].style.background='#555';
+        this.blocks[i].style.opacity=0.3;
+      }
+    }
+  },
+
+  startTimer() {
+    clearInterval(this.interval);
+    this.interval = setInterval(()=>{
+      if(!this.paused){
+        this.currentBlocks -= this.removePerSecond;
+        if(this.currentBlocks <= 0){
+          this.currentBlocks = 0;
+          clearInterval(this.interval);
+          this.showInfo();
+        }
+        this.updateBlocks();
+      }
+    },1000);
+  },
+
+  showInfo() {
+    clearInterval(this.interval);
+    this.signInfo.style.display = 'block';
+    this.timerContainer.style.display = 'none';
+    this.showInfoButton.style.display = 'none';
+    this.pauseButton.style.display = 'none';
+    this.nextButton.style.display = 'inline-block';
+  },
+
+  togglePause() {
+    this.paused = !this.paused;
+    this.pauseButton.textContent = this.paused ? "Продовжити" : "Пауза";
+  },
+
+  nextSign() {
+    this.currentIndex++;
+    if(this.currentIndex >= this.signs.length) this.currentIndex = 0;
+    this.loadSign();
+  }
+};
+
+SignQuiz.init();
+</script>
+
+</body>
+</html>
