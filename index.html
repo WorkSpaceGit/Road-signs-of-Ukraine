@@ -944,14 +944,16 @@ const SignQuiz = {
     }
   },
 
-  nextSign() {
-    this.currentIndex++;
-    if (this.currentIndex >= this.order.length) {
-      this.order = this.shuffle([...Array(this.signs.length).keys()]);
-      this.currentIndex = 0;
-    }
-    this.loadSign();
+nextSign() {
+  this.currentIndex++;
+  if (this.currentIndex >= this.order.length) {
+    // Кінець тесту – показуємо повідомлення
+    document.getElementById("signWrapper").innerHTML = "<h1>🎉<br>Гарна робота!<br>Насолоджуйтесь життям...</h1>";
+    document.getElementById("bottomContent").classList.add("hidden");
+    return;
   }
+  this.loadSign();
+}
 };
 
 SignQuiz.init();
