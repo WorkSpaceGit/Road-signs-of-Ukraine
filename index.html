@@ -9,7 +9,7 @@ html, body {
   padding: 0;
   min-height: 100%;
   font-family: Arial, sans-serif;
-  background: #1e1e1e;
+  background: #000;
   color: #f0f0f0;
   text-align: center;
 }
@@ -21,19 +21,30 @@ body {
   padding: 20px;
 }
 
-#sourceLink {
+#topControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+label {
+  font-size: 14px;
+}
+
+#sourceLine {
   font-size: 12px;
   margin-bottom: 10px;
 }
-#sourceLink a {
+#sourceLine a {
   color: #66aaff;
   text-decoration: none;
 }
-#sourceLink a:hover {
+#sourceLine a:hover {
   text-decoration: underline;
 }
 
-/* === Блок для знака 700x700 === */
 #signWrapper {
   width: 700px;
   height: 700px;
@@ -41,7 +52,7 @@ body {
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
-  background: #1e1e1e;
+  background: #000;
 }
 
 #signImage {
@@ -89,34 +100,58 @@ button {
   gap: 10px;
   justify-content: center;
 }
-
-@media (max-height: 700px) {
-  #timerContainer {
-    grid-template-columns: repeat(14, 15px);
-    height: 25px;
-  }
-  button {
-    font-size: 16px;
-    padding: 8px 16px;
-  }
-}
 </style>
 </head>
 <body>
 
-<div id="sourceLink">
-  джерело: 
+<div id="topControls">
+  <label><input type="checkbox" value="1"> 1. Попереджувальні знаки</label>
+  <label><input type="checkbox" value="2"> 2. Знаки пріоритету</label>
+  <label><input type="checkbox" value="3"> 3. Заборонні знаки</label>
+  <label><input type="checkbox" value="4"> 4. Наказові знаки</label>
+  <label><input type="checkbox" value="5"> 5. Інформаційно-вказівні знаки</label>
+  <label><input type="checkbox" value="6"> 6. Знаки сервісу</label>
+  <label><input type="checkbox" value="7"> 7. Таблички до дорожніх знаків</label>
+  <label><input type="checkbox" id="modeRandom" checked> Випадково</label>
+  <label><input type="checkbox" id="showStats"> Статистика</label>
+  <label><input type="checkbox" id="autoMode"> Авто</label>
+</div>
+
+<div id="sourceLine">
   <a href="https://uk.wikipedia.org/wiki/%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D1%96_%D0%B7%D0%BD%D0%B0%D0%BA%D0%B8_%D0%A3%D0%BA%D1%80%D0%B0%D1%97%D0%BD%D0%B8" target="_blank">
-    Вікіпедія
+    джерело
   </a>
+  <span id="statsLine"></span>
 </div>
 
 <div id="signWrapper">
-  <img id="signImage" src="" alt="UA road sign" loading="lazy">
+  <!-- Стартовий SVG -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="700" height="700" viewBox="0 0 3316.75 3316.75">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .fil2 {fill:black}
+    .fil1 {fill:#DA251D}
+    .fil0 {fill:#FFF500}
+    .fil3 {fill:black;fill-rule:nonzero}
+   ]]>
+  </style>
+ </defs>
+ <g id="Layer_x0020_1">
+  <g id="_2967074264240">
+   <circle id="circle180" class="fil0" cx="1658.37" cy="1658.37" r="1658.37"/>
+   <circle id="circle182" class="fil1" cx="1658.37" cy="1658.37" r="1603.09"/>
+   <circle id="circle184" class="fil0" cx="1658.37" cy="1658.37" r="1326.7"/>
+   <path id="path118" class="fil2" d="M603.95 1728.66c-50.7,0 -91.51,7.47 -91.51,58.17 0,50.7 40.81,58.2 91.51,58.2l2108.85 0c50.7,0 91.5,-7.5 91.5,-58.2 0,-50.7 -40.81,-58.17 -91.5,-58.17l-2108.85 0z"/>
+  </g>
+  <path class="fil2" d="M513.75 2187.57c0,35.87 28.69,64.95 64.95,64.95 35.46,0 64.15,-29.09 64.15,-64.95 0,-35.46 -28.69,-64.55 -64.15,-64.55 -36.26,0 -64.95,29.09 -64.95,64.55zm1968.08 -150.22l-72.13 0 0 187.69c-0.4,132.29 224.74,132.29 225.14,0l0 -187.69 -72.12 0 0 187.69c-0.4,45.43 -80.89,45.43 -80.89,0l0 -187.69zm-187.69 282.12l0 -111.17 98.82 -170.95 -83.68 0 -51 103.61 -51.01 -103.61 -82.88 0 98.43 170.95 0 111.17 71.33 0zm-413.22 0l71.33 0 0 -112.77 -9.17 -54.59 1.99 -0.4 24.7 56.59 63.76 111.17 72.12 0 0 -282.12 -70.93 0 0 127.91c0.4,0 7.57,48.61 7.97,48.61l-1.99 0.4 -23.91 -56.58 -68.14 -120.34 -67.74 0 0 282.12zm-238.29 -47.02c26.3,33.87 62.16,51 96.03,51 51.8,0 109.18,-29.89 111.57,-84.48 3.19,-69.33 -47.02,-86.87 -97.23,-96.03 -21.92,-4.78 -36.66,-12.75 -37.46,-26.3 1.19,-32.68 51.8,-33.87 81.29,-2.39l46.62 -35.86c-29.09,-35.46 -62.16,-45.03 -96.43,-45.03 -51.8,0 -102.01,29.09 -102.01,84.48 0,53.8 41.44,82.48 86.87,89.66 23.11,3.19 49.02,12.35 48.22,28.29 -1.99,30.28 -64.15,28.69 -92.44,-5.58l-45.03 42.24zm-101.61 -235.1l-64.95 0 -98.42 282.12 76.51 0 17.53 -56.58 75.31 0 18.33 56.58 76.51 0 -100.81 -282.12zm-53.39 162.18l20.72 -82.48 1.99 0 19.52 82.48 -42.24 0zm-162.98 119.94l0 -111.17 98.82 -170.95 -83.68 0 -51 103.61 -51.01 -103.61 -82.88 0 98.43 170.95 0 111.17 71.33 0zm-400.87 -92.85c0,64.56 58.58,96.83 117.15,96.83 58.57,0 116.75,-32.28 116.75,-96.83l0 -96.43c0,-64.56 -58.57,-96.83 -117.15,-96.83 -58.58,0 -116.76,31.88 -116.76,96.83l0 96.43zm71.33 -96.43c0,-20.72 22.31,-31.88 44.63,-31.88 23.11,0 46.62,9.96 46.62,31.88l0 96.43c0,20.32 -22.71,30.69 -45.43,30.69 -22.71,0 -45.83,-9.96 -45.83,-30.69l0 -96.43zm-310.81 189.28l71.33 0 0 -82.48 41.84 0c68.14,0 102.81,-49.81 102.81,-100.02 0,-49.81 -34.27,-99.62 -103.2,-99.62l-112.77 0 0 282.12zm71.33 -145.84l0 -69.73 41.44 0c43.04,-0.4 43.04,70.13 0,69.73l-41.44 0zm977.07 241.61l-72.13 0 0 187.69c-0.4,132.29 224.74,132.29 225.14,0l0 -187.69 -72.12 0 0 187.69c-0.4,45.43 -80.89,45.43 -80.89,0l0 -187.69zm-105.2 162.98l-26.3 0 0 -162.98 -58.58 0 -131.5 178.92 22.71 41.84 99.22 0 0 61.37 68.14 0 0 -61.37 26.3 0 0 -57.78zm-139.07 0.8l50.61 -72.13 -0.8 72.13 -49.81 0zm1185.47 -391.44c0,35.87 28.69,64.95 64.95,64.95 35.46,0 64.15,-29.09 64.15,-64.95 0,-35.46 -28.69,-64.55 -64.15,-64.55 -36.26,0 -64.95,29.09 -64.95,64.55z"/>
+  <path class="fil3" d="M1151.25 1381.36l198.05 0 0 138.04c0,54.68 -44.34,99.02 -99.02,99.02l-0 0c-54.68,0 -99.02,-44.34 -99.02,-99.02l-0 -138.04zm1003.75 -448.61l-102.2 -309.05c-14.22,-42.99 -54.43,-72.05 -99.71,-72.05 0,0 0,0 0,0l-605.22 0c0,0 -0.01,0 -0.01,0 -47.3,0 -88.8,31.66 -101.3,77.27 -30.49,111.44 -84.8,303.82 -84.8,303.82 -44.74,0 -81.02,36.28 -81.02,81.02l0 246.06c0,44.75 36.28,81.02 81.02,81.02l993.25 0c44.74,-0 81.02,-36.28 81.02,-81.02l0 -246.06c0,-44.74 -36.28,-81.02 -81.02,-81.02l-0 0zm-850.59 -264.55c7.01,-26.25 30.8,-44.53 57.96,-44.53 0,0 0.02,0 0.02,0l581.66 0c0,-0 0,-0 0,-0 26.39,0 49.68,17.24 57.4,42.46l81.53 266.62 -849.2 0 70.63 -264.55zm-54.13 531.61c0,0 0,0 0,0 -54.68,0 -99.02,-44.34 -99.02,-99.02 0,-54.68 44.34,-99.02 99.02,-99.02 54.68,0 99.02,44.34 99.02,99.02 0,0 0,0 0,0 0,0 0,0.02 0,0.02 0,54.67 -44.34,99.01 -99.01,99.01 0,0 -0.01,0 -0.01,0l-0.01 0zm819.2 0c0,0 0,0 0,0 -54.68,0 -99.02,-44.34 -99.02,-99.02 0,-54.68 44.35,-99.02 99.02,-99.02 54.68,0 99.02,44.34 99.02,99.02 0,0 0,0 0,0 0,0 0,0.02 0,0.02 0,54.67 -44.34,99.01 -99.01,99.01 0,0 -0.01,0 -0.01,0l-0.01 0zm-96.02 181.54l198.05 0 0 138.04c0,54.68 -44.34,99.02 -99.02,99.02l-0 0c-54.68,0 -99.02,-44.34 -99.02,-99.02l0 -138.04z"/>
+ </g>
+</svg>
 </div>
 
 <div id="bottomContent">
-  <div id="timerContainer"></div>
+  <div id="timerContainer" class="hidden"></div>
 
   <div id="signInfo" class="hidden">
     <h2 id="signNumber"></h2>
@@ -126,8 +161,8 @@ button {
 
   <div class="controls">
     <button id="showInfoButton">Показати інформацію</button>
-    <button id="pauseButton">Пауза</button>
-    <button id="nextButton" class="hidden">Наступний</button>
+    <button id="pauseButton" class="hidden">Пауза</button>
+    <button id="nextButton">Наступний</button>
   </div>
 </div>
 
@@ -517,18 +552,6 @@ const SignQuiz = {
   name: "Перевага перед зустрічним рухом",
   description: "Вузька ділянка дороги, під час руху якою водій має перевагу стосовно зустрічних транспортних засобів.",
   image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/UA_road_sign_2.6.svg/2880px-UA_road_sign_2.6.svg.png"
-},
-{
-  number: "1.3.1",
-  name: "Декілька поворотів",
-  description: "Ділянка дороги з двома і більше розташованими один за одним небезпечними поворотами — з першим поворотом праворуч",
-  image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/UA_road_sign_1.3.1.svg/1280px-UA_road_sign_1.3.1.svg.png"
-},
-{
-  number: "1.3.2",
-  name: "Декілька поворотів",
-  description: "Ділянка дороги з двома і більше розташованими один за одним небезпечними поворотами — з першим поворотом ліворучч",
-  image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/UA_road_sign_1.3.2.svg/1280px-UA_road_sign_1.3.2.svg.png"
 },
 {
   number: "3.1",
@@ -2387,17 +2410,22 @@ const SignQuiz = {
     "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/UA_road_sign_7.29.6.svg/1024px-UA_road_sign_7.29.6.svg.png"
   }
   ],
+  isStartScreen: true,
   order: [],
+  pool: [],
   currentIndex: 0,
   totalBlocks: 14,
-  removePerSecond: 2,
+  removePerSecond: 1.4,
   currentBlocks: 14,
   paused: false,
-  lastTime: null,
   animFrame: null,
+  autoTimer: null,
+  selectedGroups: [],
+  statsEnabled: false,
+  autoEnabled: false,
+  randomMode: true,
 
   init() {
-    this.signImage = document.getElementById("signImage");
     this.timerContainer = document.getElementById("timerContainer");
     this.signInfo = document.getElementById("signInfo");
     this.signNumber = document.getElementById("signNumber");
@@ -2406,12 +2434,13 @@ const SignQuiz = {
     this.showInfoButton = document.getElementById("showInfoButton");
     this.pauseButton = document.getElementById("pauseButton");
     this.nextButton = document.getElementById("nextButton");
+    this.statsLine = document.getElementById("statsLine");
 
     this.showInfoButton.addEventListener("click", () => this.showInfo());
     this.pauseButton.addEventListener("click", () => this.togglePause());
     this.nextButton.addEventListener("click", () => this.nextSign());
 
-    // створюю таймер-блоки один раз
+    // таймер-блоки
     this.blocks = [];
     for(let i=0;i<this.totalBlocks;i++){
       let b = document.createElement('div');
@@ -2420,11 +2449,41 @@ const SignQuiz = {
       this.blocks.push(b);
     }
 
-    // формуємо випадковий порядок індексів
-    this.order = this.shuffle([...Array(this.signs.length).keys()]);
-    this.currentIndex = 0;
+    // чекбокси
+    document.querySelectorAll("#topControls input[type=checkbox]").forEach(cb=>{
+      cb.addEventListener("change", ()=>this.updateSettings());
+    });
+    this.updateSettings();
+  },
 
-    this.loadSign();
+  updateSettings() {
+    this.selectedGroups = [...document.querySelectorAll("#topControls input[type=checkbox]")]
+      .filter(cb=>cb.checked && cb.value)
+      .map(cb=>parseInt(cb.value));
+    this.randomMode = document.getElementById("modeRandom").checked;
+    this.statsEnabled = document.getElementById("showStats").checked;
+    this.autoEnabled = document.getElementById("autoMode").checked;
+
+    let pool = this.signs;
+    if(this.selectedGroups.length>0) {
+      pool = this.signs.filter(s=>{
+        let g = parseInt(s.number.split(".")[0]);
+        return this.selectedGroups.includes(g);
+      });
+    }
+    this.pool = pool;
+    this.order = [...Array(pool.length).keys()];
+    if(this.randomMode) this.order = this.shuffle(this.order);
+    this.currentIndex = 0;
+    this.updateStats();
+  },
+
+  updateStats() {
+    if(this.statsEnabled && !this.isStartScreen) {
+      this.statsLine.textContent = ` | ${this.currentIndex+1}/${this.order.length}`;
+    } else {
+      this.statsLine.textContent = "";
+    }
   },
 
   shuffle(array) {
@@ -2436,17 +2495,8 @@ const SignQuiz = {
   },
 
   loadSign() {
-    const sign = this.signs[this.order[this.currentIndex]];
-
-    // завантажуємо поточний знак
-    this.signImage.src = sign.image;
-
-    // попереднє завантаження наступного
-    const nextIndex = (this.currentIndex + 1) % this.order.length;
-    const nextSign = this.signs[this.order[nextIndex]];
-    const preloadImg = new Image();
-    preloadImg.src = nextSign.image;
-
+    const sign = this.pool[this.order[this.currentIndex]];
+    document.getElementById("signWrapper").innerHTML = `<img id="signImage" src="${sign.image}" alt="UA road sign">`;
     this.signNumber.textContent = sign.number;
     this.signName.textContent = sign.name;
     this.signDescription.textContent = sign.description;
@@ -2461,8 +2511,10 @@ const SignQuiz = {
     this.updateBlocks();
 
     cancelAnimationFrame(this.animFrame);
+    clearTimeout(this.autoTimer);
     this.lastTime = performance.now();
     this.runTimer(this.lastTime);
+    this.updateStats();
   },
 
   updateBlocks() {
@@ -2503,6 +2555,18 @@ const SignQuiz = {
     this.showInfoButton.classList.add("hidden");
     this.pauseButton.classList.add("hidden");
     this.nextButton.classList.remove("hidden");
+
+    if(this.isStartScreen) {
+      this.signNumber.textContent = "";
+      this.signName.textContent = "";
+      this.signDescription.textContent = "Це гарниій варіант закріпити свої знання.";
+      return;
+    }
+
+    if(this.autoEnabled) {
+      clearTimeout(this.autoTimer);
+      this.autoTimer = setTimeout(()=>this.nextSign(),15000);
+    }
   },
 
   togglePause() {
@@ -2514,16 +2578,22 @@ const SignQuiz = {
     }
   },
 
-nextSign() {
-  this.currentIndex++;
-  if (this.currentIndex >= this.order.length) {
-    // Кінець тесту – показуємо повідомлення
-    document.getElementById("signWrapper").innerHTML = "<h1>🎉<br>Гарна робота!<br>Насолоджуйтесь життям...</h1>";
-    document.getElementById("bottomContent").classList.add("hidden");
-    return;
+  nextSign() {
+    clearTimeout(this.autoTimer);
+    if(this.isStartScreen) {
+      this.isStartScreen = false;
+      this.updateSettings();
+      this.loadSign();
+      return;
+    }
+    this.currentIndex++;
+    if (this.currentIndex >= this.order.length) {
+      document.getElementById("signWrapper").innerHTML = "<h1>🎉<br>Гарна робота!<br>Насолоджуйтесь життям...</h1>";
+      document.getElementById("bottomContent").classList.add("hidden");
+      return;
+    }
+    this.loadSign();
   }
-  this.loadSign();
-}
 };
 
 SignQuiz.init();
