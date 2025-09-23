@@ -3,129 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <title>Дорожні знаки України</title>
+<link rel="icon" type="image/svg+xml" 
+href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3316.75 3316.75"><circle fill="%23FFF500" cx="1658.37" cy="1658.37" r="1658.37"/><circle fill="%23DA251D" cx="1658.37" cy="1658.37" r="1603.09"/><circle fill="%23FFF500" cx="1658.37" cy="1658.37" r="1326.7"/></svg>'>
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  font-family: Arial, sans-serif;
-  background: #000;
-  color: #f0f0f0;
-  text-align: center;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-
-#topControls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 10px;
-  justify-content: center;
-}
-
-label {
-  font-size: 14px;
-}
-
-#sourceLine {
-  font-size: 12px;
-  margin-bottom: 10px;
-}
-#sourceLine a {
-  color: #66aaff;
-  text-decoration: none;
-}
-#sourceLine a:hover {
-  text-decoration: underline;
-}
-
-#signWrapper {
-  width: 700px;
-  height: 700px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-  background: #000;
-}
-
-#signImage {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  pointer-events: none;
-}
-
-#bottomContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-#timerContainer {
-  display: grid;
-  grid-template-columns: repeat(14, 20px);
-  gap: 2px;
-  margin-bottom: 10px;
-  height: 30px;
-}
-
-.timerBlock {
-  height: 30px;
-  transition: background 0.3s linear, opacity 0.3s linear;
-}
-
-.hidden { display: none !important; }
-
-button {
-  padding: 10px 20px;
-  font-size: 18px;
-  cursor: pointer;
-  background: #333;
-  color: #f0f0f0;
-  border: none;
-  border-radius: 5px;
-  margin: 5px;
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
+html,body{margin:0;padding:0;min-height:100%;font-family:Arial,sans-serif;background:#000;color:#f0f0f0;text-align:center}
+body{display:flex;flex-direction:column;align-items:center;padding:20px}
+#menuToggle{cursor:pointer;font-size:28px;margin-bottom:5px;user-select:none}
+#settingsPanel{overflow:hidden;max-height:0;transition:max-height .4s ease;width:100%;background:#111;padding:0 10px;box-sizing:border-box}
+#settingsPanel.open{max-height:200px;padding:10px 0}
+#settingsPanel .row{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin:5px 0}
+label{font-size:14px}
+#signWrapper{width:700px;height:700px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;background:#000}
+#signImage{max-width:100%;max-height:100%;object-fit:contain;pointer-events:none}
+#bottomContent{display:flex;flex-direction:column;align-items:center;width:100%}
+#timerContainer{display:grid;grid-template-columns:repeat(14,20px);gap:2px;margin-bottom:10px;height:30px}
+.timerBlock{height:30px;transition:background .3s linear,opacity .3s linear}
+.hidden{display:none!important}
+button{padding:10px 20px;font-size:18px;cursor:pointer;background:#333;color:#f0f0f0;border:none;border-radius:5px;margin:5px}
+.controls{display:flex;gap:10px;justify-content:center}
 </style>
 </head>
 <body>
-
-<div id="topControls">
-  <label><input type="checkbox" value="1"> 1. Попереджувальні знаки</label>
-  <label><input type="checkbox" value="2"> 2. Знаки пріоритету</label>
-  <label><input type="checkbox" value="3"> 3. Заборонні знаки</label>
-  <label><input type="checkbox" value="4"> 4. Наказові знаки</label>
-  <label><input type="checkbox" value="5"> 5. Інформаційно-вказівні знаки</label>
-  <label><input type="checkbox" value="6"> 6. Знаки сервісу</label>
-  <label><input type="checkbox" value="7"> 7. Таблички до дорожніх знаків</label>
-  <label><input type="checkbox" id="modeRandom" checked> Випадково</label>
-  <label><input type="checkbox" id="showStats"> Статистика</label>
-  <label><input type="checkbox" id="autoMode"> Авто</label>
+<div id="menuToggle">+</div>
+<div id="settingsPanel">
+  <div class="row">
+    <label><input type="checkbox" value="1"> Попереджувальні</label>
+    <label><input type="checkbox" value="2"> Пріоритету</label>
+    <label><input type="checkbox" value="3"> Заборонні</label>
+    <label><input type="checkbox" value="4"> Наказові</label>
+    <label><input type="checkbox" value="5"> Інформаційно-вказівні</label>
+    <label><input type="checkbox" value="6"> Сервісу</label>
+    <label><input type="checkbox" value="7"> Таблички</label>
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="modeRandom" checked> Випадково</label>
+    <label><input type="checkbox" id="showStats" checked> Статистика <span id="statsLine"></span></label>
+    <label><input type="checkbox" id="autoMode"> Авто</label>
+    <a href="https://uk.wikipedia.org/wiki/%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D1%96_%D0%B7%D0%BD%D0%B0%D0%BA%D0%B8_%D0%A3%D0%BA%D1%80%D0%B0%D1%97%D0%BD%D0%B8" target="_blank">джерело</a>
+    <a href="https://workspacegit.github.io/ASCII-game/" target="_blank">№3</a>
+  </div>
 </div>
-
-<div id="sourceLine">
-  <a href="https://uk.wikipedia.org/wiki/%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D1%96_%D0%B7%D0%BD%D0%B0%D0%BA%D0%B8_%D0%A3%D0%BA%D1%80%D0%B0%D1%97%D0%BD%D0%B8" target="_blank">
-    джерело
-  </a>
-  <span id="statsLine"></span>
-</div>
-
 <div id="signWrapper">
-  <!-- Стартовий SVG -->
   <svg xmlns="http://www.w3.org/2000/svg" width="700" height="700" viewBox="0 0 3316.75 3316.75">
  <defs>
   <style type="text/css">
@@ -149,26 +67,21 @@ button {
  </g>
 </svg>
 </div>
-
 <div id="bottomContent">
   <div id="timerContainer" class="hidden"></div>
-
   <div id="signInfo" class="hidden">
     <h2 id="signNumber"></h2>
     <h3 id="signName"></h3>
     <p id="signDescription"></p>
   </div>
-
   <div class="controls">
     <button id="showInfoButton">Показати інформацію</button>
     <button id="pauseButton" class="hidden">Пауза</button>
     <button id="nextButton">Наступний</button>
   </div>
 </div>
-
 <script>
-const SignQuiz = {
-  signs: [
+const SignQuiz={signs:[
      {
   number: "1.1",
   name: "Небезпечний поворот праворуч",
@@ -2409,195 +2322,47 @@ const SignQuiz = {
     "description": "Інформує про виїзд на велодоріжку з двостороннім рухом.",
     "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/UA_road_sign_7.29.6.svg/1024px-UA_road_sign_7.29.6.svg.png"
   }
-  ],
-  isStartScreen: true,
-  order: [],
-  pool: [],
-  currentIndex: 0,
-  totalBlocks: 14,
-  removePerSecond: 1.4,
-  currentBlocks: 14,
-  paused: false,
-  animFrame: null,
-  autoTimer: null,
-  selectedGroups: [],
-  statsEnabled: false,
-  autoEnabled: false,
-  randomMode: true,
+],isStartScreen:true,order:[],pool:[],currentIndex:0,totalBlocks:14,removePerSecond:1.4,currentBlocks:14,paused:false,animFrame:null,autoTimer:null,selectedGroups:[],statsEnabled:true,autoEnabled:false,randomMode:true,
+init(){
+  this.timerContainer=document.getElementById("timerContainer");
+  this.signInfo=document.getElementById("signInfo");
+  this.signNumber=document.getElementById("signNumber");
+  this.signName=document.getElementById("signName");
+  this.signDescription=document.getElementById("signDescription");
+  this.showInfoButton=document.getElementById("showInfoButton");
+  this.pauseButton=document.getElementById("pauseButton");
+  this.nextButton=document.getElementById("nextButton");
+  this.statsLine=document.getElementById("statsLine");
 
-  init() {
-    this.timerContainer = document.getElementById("timerContainer");
-    this.signInfo = document.getElementById("signInfo");
-    this.signNumber = document.getElementById("signNumber");
-    this.signName = document.getElementById("signName");
-    this.signDescription = document.getElementById("signDescription");
-    this.showInfoButton = document.getElementById("showInfoButton");
-    this.pauseButton = document.getElementById("pauseButton");
-    this.nextButton = document.getElementById("nextButton");
-    this.statsLine = document.getElementById("statsLine");
+  this.showInfoButton.addEventListener("click",()=>this.showInfo());
+  this.pauseButton.addEventListener("click",()=>this.togglePause());
+  this.nextButton.addEventListener("click",()=>this.nextSign());
 
-    this.showInfoButton.addEventListener("click", () => this.showInfo());
-    this.pauseButton.addEventListener("click", () => this.togglePause());
-    this.nextButton.addEventListener("click", () => this.nextSign());
-
-    // таймер-блоки
-    this.blocks = [];
-    for(let i=0;i<this.totalBlocks;i++){
-      let b = document.createElement('div');
-      b.className = 'timerBlock';
-      this.timerContainer.appendChild(b);
-      this.blocks.push(b);
-    }
-
-    // чекбокси
-    document.querySelectorAll("#topControls input[type=checkbox]").forEach(cb=>{
-      cb.addEventListener("change", ()=>this.updateSettings());
-    });
-    this.updateSettings();
-  },
-
-  updateSettings() {
-    this.selectedGroups = [...document.querySelectorAll("#topControls input[type=checkbox]")]
-      .filter(cb=>cb.checked && cb.value)
-      .map(cb=>parseInt(cb.value));
-    this.randomMode = document.getElementById("modeRandom").checked;
-    this.statsEnabled = document.getElementById("showStats").checked;
-    this.autoEnabled = document.getElementById("autoMode").checked;
-
-    let pool = this.signs;
-    if(this.selectedGroups.length>0) {
-      pool = this.signs.filter(s=>{
-        let g = parseInt(s.number.split(".")[0]);
-        return this.selectedGroups.includes(g);
-      });
-    }
-    this.pool = pool;
-    this.order = [...Array(pool.length).keys()];
-    if(this.randomMode) this.order = this.shuffle(this.order);
-    this.currentIndex = 0;
-    this.updateStats();
-  },
-
-  updateStats() {
-    if(this.statsEnabled && !this.isStartScreen) {
-      this.statsLine.textContent = ` | ${this.currentIndex+1}/${this.order.length}`;
-    } else {
-      this.statsLine.textContent = "";
-    }
-  },
-
-  shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  },
-
-  loadSign() {
-    const sign = this.pool[this.order[this.currentIndex]];
-    document.getElementById("signWrapper").innerHTML = `<img id="signImage" src="${sign.image}" alt="UA road sign">`;
-    this.signNumber.textContent = sign.number;
-    this.signName.textContent = sign.name;
-    this.signDescription.textContent = sign.description;
-
-    this.timerContainer.classList.remove("hidden");
-    this.signInfo.classList.add("hidden");
-    this.showInfoButton.classList.remove("hidden");
-    this.pauseButton.classList.remove("hidden");
-    this.nextButton.classList.add("hidden");
-
-    this.currentBlocks = this.totalBlocks;
-    this.updateBlocks();
-
-    cancelAnimationFrame(this.animFrame);
-    clearTimeout(this.autoTimer);
-    this.lastTime = performance.now();
-    this.runTimer(this.lastTime);
-    this.updateStats();
-  },
-
-  updateBlocks() {
-    for(let i=0;i<this.totalBlocks;i++){
-      if(i<this.currentBlocks){
-        let ratio = i/(this.totalBlocks-1);
-        let r = Math.round(255*ratio);
-        let g = Math.round(255*(1-ratio));
-        this.blocks[i].style.background = `rgb(${r},${g},0)`;
-        this.blocks[i].style.opacity = 1;
-      } else {
-        this.blocks[i].style.background='#555';
-        this.blocks[i].style.opacity=0.3;
-      }
-    }
-  },
-
-  runTimer(timestamp) {
-    if(!this.paused){
-      const delta = (timestamp - this.lastTime)/1000; 
-      this.lastTime = timestamp;
-      this.currentBlocks -= this.removePerSecond * delta;
-      if(this.currentBlocks <= 0){
-        this.currentBlocks = 0;
-        this.updateBlocks();
-        this.showInfo();
-        return;
-      }
-      this.updateBlocks();
-    }
-    this.animFrame = requestAnimationFrame(t => this.runTimer(t));
-  },
-
-  showInfo() {
-    cancelAnimationFrame(this.animFrame);
-    this.signInfo.classList.remove("hidden");
-    this.timerContainer.classList.add("hidden");
-    this.showInfoButton.classList.add("hidden");
-    this.pauseButton.classList.add("hidden");
-    this.nextButton.classList.remove("hidden");
-
-    if(this.isStartScreen) {
-      this.signNumber.textContent = "";
-      this.signName.textContent = "";
-      this.signDescription.textContent = "Це гарниій варіант закріпити свої знання.";
-      return;
-    }
-
-    if(this.autoEnabled) {
-      clearTimeout(this.autoTimer);
-      this.autoTimer = setTimeout(()=>this.nextSign(),15000);
-    }
-  },
-
-  togglePause() {
-    this.paused = !this.paused;
-    this.pauseButton.textContent = this.paused ? "Продовжити" : "Пауза";
-    if(!this.paused) {
-      this.lastTime = performance.now();
-      this.runTimer(this.lastTime);
-    }
-  },
-
-  nextSign() {
-    clearTimeout(this.autoTimer);
-    if(this.isStartScreen) {
-      this.isStartScreen = false;
-      this.updateSettings();
-      this.loadSign();
-      return;
-    }
-    this.currentIndex++;
-    if (this.currentIndex >= this.order.length) {
-      document.getElementById("signWrapper").innerHTML = "<h1>🎉<br>Гарна робота!<br>Насолоджуйтесь життям...</h1>";
-      document.getElementById("bottomContent").classList.add("hidden");
-      return;
-    }
-    this.loadSign();
+  // 🔹 Створення таймер-блоків
+  this.blocks=[];
+  for(let i=0;i<this.totalBlocks;i++){
+    let b=document.createElement("div");
+    b.className="timerBlock";
+    this.timerContainer.appendChild(b);
+    this.blocks.push(b);
   }
-};
 
+  document.querySelectorAll("#settingsPanel input[type=checkbox]").forEach(cb=>{
+    cb.addEventListener("change",()=>this.updateSettings())
+  });
+  this.updateSettings()
+},
+updateSettings(){this.selectedGroups=[...document.querySelectorAll("#settingsPanel input[type=checkbox]")].filter(cb=>cb.checked&&cb.value).map(cb=>parseInt(cb.value));this.randomMode=document.getElementById("modeRandom").checked;this.statsEnabled=document.getElementById("showStats").checked;this.autoEnabled=document.getElementById("autoMode").checked;let pool=this.signs;if(this.selectedGroups.length>0){pool=this.signs.filter(s=>{let g=parseInt(s.number.split(".")[0]);return this.selectedGroups.includes(g)})}this.pool=pool;this.order=[...Array(pool.length).keys()];if(this.randomMode)this.order=this.shuffle(this.order);this.currentIndex=0;this.updateStats()},
+updateStats(){this.statsLine.textContent=(this.statsEnabled&&!this.isStartScreen)?`${this.currentIndex+1}/${this.order.length}`:""},
+shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a},
+loadSign(){const s=this.pool[this.order[this.currentIndex]];document.getElementById("signWrapper").innerHTML=`<img id="signImage" src="${s.image}" alt="UA road sign">`;this.signNumber.textContent=s.number;this.signName.textContent=s.name;this.signDescription.textContent=s.description;this.timerContainer.classList.remove("hidden");this.signInfo.classList.add("hidden");this.showInfoButton.classList.remove("hidden");this.pauseButton.classList.remove("hidden");this.nextButton.classList.add("hidden");this.currentBlocks=this.totalBlocks;this.updateBlocks();cancelAnimationFrame(this.animFrame);clearTimeout(this.autoTimer);this.lastTime=performance.now();this.runTimer(this.lastTime);this.updateStats()},
+updateBlocks(){for(let i=0;i<this.totalBlocks;i++){if(i<this.currentBlocks){let r=i/(this.totalBlocks-1),R=Math.round(255*r),G=Math.round(255*(1-r));this.blocks[i].style.background=`rgb(${R},${G},0)`;this.blocks[i].style.opacity=1}else{this.blocks[i].style.background="#555";this.blocks[i].style.opacity=.3}}},
+runTimer(t){if(!this.paused){const d=(t-this.lastTime)/1000;this.lastTime=t;this.currentBlocks-=this.removePerSecond*d;if(this.currentBlocks<=0){this.currentBlocks=0;this.updateBlocks();this.showInfo();return}this.updateBlocks()}this.animFrame=requestAnimationFrame(e=>this.runTimer(e))},
+showInfo(){cancelAnimationFrame(this.animFrame);this.signInfo.classList.remove("hidden");this.timerContainer.classList.add("hidden");this.showInfoButton.classList.add("hidden");this.pauseButton.classList.add("hidden");this.nextButton.classList.remove("hidden");if(this.isStartScreen){this.signNumber.textContent="";this.signName.textContent="";this.signDescription.innerHTML="Дорожні знаки України.<br>Можливість закріпити свої знання.";return}if(this.autoEnabled){clearTimeout(this.autoTimer);this.autoTimer=setTimeout(()=>this.nextSign(),15000)}},
+togglePause(){this.paused=!this.paused;this.pauseButton.textContent=this.paused?"Продовжити":"Пауза";if(!this.paused){this.lastTime=performance.now();this.runTimer(this.lastTime)}},
+nextSign(){clearTimeout(this.autoTimer);if(this.isStartScreen){this.isStartScreen=false;this.updateSettings();this.loadSign();return}this.currentIndex++;if(this.currentIndex>=this.order.length){document.getElementById("signWrapper").innerHTML="<h1>🎉<br>Гарна робота!<br>... як сказала фрау:<br>Насолоджуйтесь життям!!</h1>";document.getElementById("bottomContent").classList.add("hidden");return}this.loadSign()}};
 SignQuiz.init();
+const menuToggle=document.getElementById("menuToggle"),settingsPanel=document.getElementById("settingsPanel");menuToggle.addEventListener("click",()=>{settingsPanel.classList.toggle("open");menuToggle.textContent=settingsPanel.classList.contains("open")?"-":"+"});
 </script>
-
 </body>
 </html>
