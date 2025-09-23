@@ -24,7 +24,7 @@ button{padding:10px 20px;font-size:18px;cursor:pointer;background:#333;color:#f0
 </style>
 </head>
 <body>
-<div id="menuToggle">+</div>
+<div id="menuToggle">≡</div>
 <div id="settingsPanel">
   <div class="row">
     <label><input type="checkbox" value="1"> Попереджувальні</label>
@@ -2362,7 +2362,7 @@ showInfo(){cancelAnimationFrame(this.animFrame);this.signInfo.classList.remove("
 togglePause(){this.paused=!this.paused;this.pauseButton.textContent=this.paused?"Продовжити":"Пауза";if(!this.paused){this.lastTime=performance.now();this.runTimer(this.lastTime)}},
 nextSign(){clearTimeout(this.autoTimer);if(this.isStartScreen){this.isStartScreen=false;this.updateSettings();this.loadSign();return}this.currentIndex++;if(this.currentIndex>=this.order.length){document.getElementById("signWrapper").innerHTML="<h1>🎉<br>Гарна робота!<br>... як сказала фрау:<br>Насолоджуйтесь життям!!</h1>";document.getElementById("bottomContent").classList.add("hidden");return}this.loadSign()}};
 SignQuiz.init();
-const menuToggle=document.getElementById("menuToggle"),settingsPanel=document.getElementById("settingsPanel");menuToggle.addEventListener("click",()=>{settingsPanel.classList.toggle("open");menuToggle.textContent=settingsPanel.classList.contains("open")?"-":"+"});
+const menuToggle=document.getElementById("menuToggle"),settingsPanel=document.getElementById("settingsPanel");menuToggle.addEventListener("click",()=>{settingsPanel.classList.toggle("open");menuToggle.textContent=settingsPanel.classList.contains("open")?"-":"≡"});
 </script>
 </body>
 </html>
